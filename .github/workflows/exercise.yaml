@@ -2,7 +2,11 @@ name: exercise
 
 on:
   workflow_dispatch:
-
+    inputs:
+      skip_push:
+        description: 'Skip pushing to DockerHub'
+        required: false
+        default: 'false'
 jobs:
   lint-and-test:
     name: Linting and testing
@@ -47,4 +51,5 @@ jobs:
       - name: Build docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/github-action-school .
       - name: Push to Dockerhub
+        if: ${{ inputs.skip_push != 'true' }}
         run: docker push ${{ secrets.DOCKER_USERNAME }}/github-action-school
